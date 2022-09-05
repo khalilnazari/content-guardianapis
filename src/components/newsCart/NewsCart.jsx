@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import {FaBookmark, FaRegBookmark} from 'react-icons/fa'
 
 function NewsCart({news, bookmarkted, rowId}) {
-
+    const [isBookmarked, setIsBookmarked] = useState(bookmarkted); 
     const publishDate = news.webPublicationDate.split('T')[0].split('-'); 
     const year = publishDate[0]
     const month = publishDate[1]
@@ -20,6 +20,7 @@ function NewsCart({news, bookmarkted, rowId}) {
         const contentGuardianAPI = localStorage.getItem('contentGuardianAPI')
         const oldNews = JSON.parse(contentGuardianAPI) || []; 
         localStorage.setItem("contentGuardianAPI", JSON.stringify([...oldNews, news]))
+        setIsBookmarked(!isBookmarked)
     }
 
     // rmeove bookmarked news
@@ -28,7 +29,8 @@ function NewsCart({news, bookmarkted, rowId}) {
         const oldNews = JSON.parse(contentGuardianAPI) || []; 
 
         const updatedNews = oldNews.filter(news => news.id !== article.id); 
-        localStorage.setItem("contentGuardianAPI", JSON.stringify(updatedNews))
+        localStorage.setItem("contentGuardianAPI", JSON.stringify(updatedNews)); 
+        setIsBookmarked(!isBookmarked)
     } 
 
     return (
@@ -41,7 +43,7 @@ function NewsCart({news, bookmarkted, rowId}) {
                 <div className="flex items-center justify-between">
                     <Link to={'/'+rowId} state={{data:news}} className='px-5 py-2 text-sm bg-gray-600 hover:bg-gray-700 text-white rounded'>Read more</Link>
                     
-                    {bookmarkted === true ? (
+                    {isBookmarked === true ? (
                         <FaBookmark  className='text-2xl cursor-pointer text-gray-600' onClick={() => removeFromBookmark(news)}/>
                     ): (
                         <FaRegBookmark  className='text-2xl cursor-pointer text-gray-400' onClick={() => addToBookmark(news)}/>
