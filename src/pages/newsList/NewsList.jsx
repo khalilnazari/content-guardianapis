@@ -2,8 +2,16 @@ import React, { useEffect, useState} from 'react'
 import {GoSearch} from 'react-icons/go'
 import NewsCart from '../../components/newsCart/NewsCart'
 import {AiOutlineLoading3Quarters} from 'react-icons/ai'
+import { useLocation } from 'react-router-dom'
 
 function NewsList() {
+
+    // get search query form URL
+    const location = useLocation(); 
+    const searchQuery = location.search; 
+    const queryTerm = new URLSearchParams(searchQuery).get('q');
+
+    // state
     const [ searchText, setSearchText ] = useState(); 
     const [ searchResult, setSearchResult ] = useState(); 
     const [ bookmarkedItems, setBookmarkedItems ] = useState(); 
@@ -15,7 +23,7 @@ function NewsList() {
         fetch(BASE_URL)
             .then((response) => response.json())
             .then((data) => {
-                setSearchResult(data.response.results)
+                setSearchResult(data.response.results); 
             })
             .catch(erorr => console.log(erorr))
     }
@@ -32,7 +40,7 @@ function NewsList() {
     useEffect(() => {
         loadBookmarkedItem(); 
         // return; 
-        searchNews();  
+        searchNews(queryTerm);  
     }, [])
 
 
@@ -51,11 +59,16 @@ function NewsList() {
         setSearchText('')
     } 
     
+    const handlePagination = () => {
+
+    }
+
+    // jsx
     return (
         <>
             {/* search bar */}
             <section className='bg-gray-200 h-36 py-10'>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} className='px-3'>
                     <div className="container max-w-[800px] mx-auto flex items-center gap-3 bg-white rounded">
                    
                         <input 
@@ -85,6 +98,14 @@ function NewsList() {
                             <span>Loading...</span>
                         </div>
                     )}
+                </div>
+
+                <div className='max-w-[600px] mx-auto mb-10'>
+                    <div className='flex items-center justify-between gap-4'>
+                        <span className='py-2 px-3 bg-gray-600 text-white rounded cursor-pointer' onClick={() => handlePagination(1)}>First</span>
+
+                        <span className='py-2 px-3 bg-gray-600 text-white rounded cursor-pointer' onClick={() => handlePagination(2)}>Last</span>
+                    </div>
                 </div>
             </section>
         </>
