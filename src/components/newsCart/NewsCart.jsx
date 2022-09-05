@@ -2,23 +2,18 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import {FaBookmark, FaRegBookmark} from 'react-icons/fa'
 
-function NewsCart({news, bookmarkted}) {
-    const publishDate = news.webPublicationDate.split('T')[0]; 
-    const date = new Date(publishDate); 
-    const month = date.getMonth(); 
-    const monthShort = date.toLocaleString('default', { month: 'short' }).toLowerCase()
-    const day= String(date.getDate()).padStart(2, '0'); 
-    const year = date.getFullYear(); 
-    const newsDate = `${day}/${month}/${year}`;
+function NewsCart({news, bookmarkted, rowId}) {
+
+    const publishDate = news.webPublicationDate.split('T')[0].split('-'); 
+    const year = publishDate[0]
+    const month = publishDate[1]
+    const date = publishDate[2]
+    const monthShort = month.toLocaleString('default', { month: 'short' }).toLowerCase()
+    const newsDate = `${date}/${month}/${year}`;
     const placeHolderImage ="https://www.villagereach.org/wp-content/uploads/2021/05/guardian-logo.png";
     
     // get only a two lines of title 
     const title = news.webTitle.substring(0, 35)
-
-    const newsID = news.id.split('/'); 
-    const titleString = newsID[newsID.length -1]; 
-    const newType = news.type === "liveblog" ? 'live' : news.type; 
-    const urlID = [news.sectionId, newType, year, monthShort, day, titleString].join('/')  
     
     // add bookmarked news
     const addToBookmark = (news) => {
@@ -44,7 +39,7 @@ function NewsCart({news, bookmarkted}) {
                 <p className="leading-relaxed mb-3 text-gray-400">{newsDate}</p>
                 
                 <div className="flex items-center justify-between">
-                    <Link to={'/'+urlID} state={{data:news}} className='px-5 py-2 text-sm bg-gray-600 hover:bg-gray-700 text-white rounded'>Read more</Link>
+                    <Link to={'/'+rowId} state={{data:news}} className='px-5 py-2 text-sm bg-gray-600 hover:bg-gray-700 text-white rounded'>Read more</Link>
                     
                     {bookmarkted === true ? (
                         <FaBookmark  className='text-2xl cursor-pointer text-gray-600' onClick={() => removeFromBookmark(news)}/>

@@ -8,7 +8,6 @@ function NewsDetail() {
     const placeHolderImage ="https://www.villagereach.org/wp-content/uploads/2021/05/guardian-logo.png";
     const location = useLocation(); 
     const {data} = location.state; 
-    console.log(data)
     const publishDate = data.webPublicationDate.split('T')[0].split('-'); 
     const year = publishDate[0]
     const month = publishDate[1]
@@ -21,7 +20,7 @@ function NewsDetail() {
                 <p className='text-2xl font-bold'>{data.webTitle}</p>
                 <p className='text-md mt-3'>Published on: {date}/{month}/{year}</p>
                 <p>Type: {data.type}</p>
-                <p>Read on the website: <a href={data.webUrl}>click</a></p>
+                <p><a href={data.webUrl}>Read on the website</a></p>
             </div>
         </section>
     )

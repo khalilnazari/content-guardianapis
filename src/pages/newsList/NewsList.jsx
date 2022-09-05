@@ -1,7 +1,7 @@
 import React, { useEffect, useState} from 'react'
 import {GoSearch} from 'react-icons/go'
 import NewsCart from '../../components/newsCart/NewsCart'
-
+import {AiOutlineLoading3Quarters} from 'react-icons/ai'
 
 function NewsList() {
     const [ searchText, setSearchText ] = useState(); 
@@ -12,8 +12,6 @@ function NewsList() {
     const searchNews = (searchTerm) => {
         const API_KEY = "&api-key=test"; 
         const BASE_URL = `https://content.guardianapis.com/search?q=${searchTerm}${API_KEY}`; 
-        console.log("BASE_URL", BASE_URL)
-
         fetch(BASE_URL)
             .then((response) => response.json())
             .then((data) => {
@@ -32,11 +30,9 @@ function NewsList() {
 
     // After page is loaded. 
     useEffect(() => {
-        console.log(searchResult)
-
         loadBookmarkedItem(); 
         // return; 
-        searchNews('war');  
+        searchNews();  
     }, [])
 
 
@@ -78,10 +74,17 @@ function NewsList() {
             {/* New List */}
             <section className="body-font bg-white mx-2">
                 <div className="max-w-[1300px] my-5 mx-auto">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-                        {bookmarkedItems?.map(result => <NewsCart news={result} key={result.id} bookmarkted={true}/>)}
-                        {searchResult?.map(result => <NewsCart news={result} key={result.id}/>)}
-                    </div>
+                    {searchResult ? (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
+                            {bookmarkedItems?.map((result, index) => <NewsCart news={result} key={result.id} rowId={index} bookmarkted={true}/>)}
+                            {searchResult?.map((result, index) => <NewsCart news={result} rowId={index} key={result.id}/>)}
+                        </div>
+                    ): (
+                        <div className='h-96 flex items-center justify-center gap-4'>
+                            <AiOutlineLoading3Quarters />
+                            <span>Loading...</span>
+                        </div>
+                    )}
                 </div>
             </section>
         </>
