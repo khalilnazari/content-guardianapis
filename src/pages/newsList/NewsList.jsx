@@ -6,11 +6,13 @@ import NewsCart from '../../components/newsCart/NewsCart'
 function NewsList() {
     const [ searchText, setSearchText ] = useState(); 
     const [ searchResult, setSearchResult ] = useState(); 
+    const [ bookmarkedItems, setBookmarkedItems ] = useState(); 
 
     // Call API
     const searchNews = (searchTerm) => {
         const API_KEY = "&api-key=test"; 
         const BASE_URL = `https://content.guardianapis.com/search?q=${searchTerm}${API_KEY}`; 
+        console.log("BASE_URL", BASE_URL)
 
         fetch(BASE_URL)
             .then((response) => response.json())
@@ -19,11 +21,22 @@ function NewsList() {
             })
             .catch(erorr => console.log(erorr))
     }
+    
+    // getBookMakred Items
+    const loadBookmarkedItem = () => {
+        const contentGuardianAPI = localStorage.getItem('contentGuardianAPI')
+        const data = JSON.parse(contentGuardianAPI) || []; 
+        setBookmarkedItems(data)
+    }
 
 
     // After page is loaded. 
     useEffect(() => {
-        searchNews('');  
+        console.log(searchResult)
+
+        loadBookmarkedItem(); 
+        // return; 
+        searchNews('war');  
     }, [])
 
 
@@ -44,6 +57,7 @@ function NewsList() {
     
     return (
         <>
+            {/* search bar */}
             <section className='bg-gray-200 h-36 py-10'>
                 <form onSubmit={handleSubmit}>
                     <div className="container max-w-[800px] mx-auto flex items-center gap-3 bg-white rounded">
@@ -65,7 +79,8 @@ function NewsList() {
             <section className="body-font bg-white mx-2">
                 <div className="max-w-[1300px] my-5 mx-auto">
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3">
-                        {searchResult.map(result => <NewsCart news={result} key={result.id}/>)}
+                        {bookmarkedItems?.map(result => <NewsCart news={result} key={result.id} bookmarkted={true}/>)}
+                        {searchResult?.map(result => <NewsCart news={result} key={result.id}/>)}
                     </div>
                 </div>
             </section>
