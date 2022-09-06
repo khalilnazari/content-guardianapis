@@ -3,13 +3,17 @@ import { Link } from 'react-router-dom'
 import {FaBookmark, FaRegBookmark} from 'react-icons/fa'
 
 function NewsCart({news, bookmarkted, rowId}) {
+    // state 
     const [isBookmarked, setIsBookmarked] = useState(bookmarkted); 
+    
+    // date
     const publishDate = news.webPublicationDate.split('T')[0].split('-'); 
     const year = publishDate[0]
     const month = publishDate[1]
     const date = publishDate[2]
-    const monthShort = month.toLocaleString('default', { month: 'short' }).toLowerCase()
     const newsDate = `${date}/${month}/${year}`;
+
+    // placeholder image
     const placeHolderImage ="https://www.villagereach.org/wp-content/uploads/2021/05/guardian-logo.png";
     
     // get only a two lines of title 
@@ -33,6 +37,7 @@ function NewsCart({news, bookmarkted, rowId}) {
         setIsBookmarked(!isBookmarked)
     } 
 
+    // jsx
     return (
         <div className="w-full bg-white rounded-md shadow-md mb-3">
             <img className="lg:h-48 md:h-36 w-full object-cover object-center rounded-md" src={news.img || placeHolderImage} alt="blog" />
@@ -41,7 +46,7 @@ function NewsCart({news, bookmarkted, rowId}) {
                 <p className="leading-relaxed mb-3 text-gray-400">{newsDate}</p>
                 
                 <div className="flex items-center justify-between">
-                    <Link to={'/'+rowId} state={{data:news}} className='px-5 py-2 text-sm bg-gray-600 hover:bg-gray-700 text-white rounded'>Read more</Link>
+                    <Link to={'/'+rowId} state={{data:news}} className='text-base text-blue-500 hover:deocration-underline'>Read more</Link>
                     
                     {isBookmarked === true ? (
                         <FaBookmark  className='text-2xl cursor-pointer text-gray-600' onClick={() => removeFromBookmark(news)}/>

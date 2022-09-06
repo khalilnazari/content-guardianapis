@@ -1,8 +1,5 @@
-import React, { useEffect } from 'react'
-
-import {GoSearch} from 'react-icons/go'
-import { useLocation, useParams } from 'react-router-dom'
-
+import React from 'react'
+import { useLocation } from 'react-router-dom'
 
 function NewsDetail() {
     const placeHolderImage ="https://www.villagereach.org/wp-content/uploads/2021/05/guardian-logo.png";
